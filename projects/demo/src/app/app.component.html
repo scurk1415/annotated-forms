@@ -4,19 +4,19 @@
       #form="ngForm">
   <div>
     <label for="name" style="display: block">Name</label>
-    <input type="text" [(ngModel)]="model.name" id="name" name="name">
+    <input type="text" [(ngModel)]="model.name" id="name" name="name" #nameField="formError">
   </div>
 
-  <div *ngIf="form.submitted && form.control.get('name')?.invalid">
-    {{form.control.get('name')?.errors?.['message']}}
+  <div *ngIf="form.submitted && nameField?.invalid">
+    <ng-container *ngIf="nameField.error.type === 'REQUIRED'">
+      Required
+    </ng-container>
   </div>
 
   <div>
     <label for="surname" style="display: block">Surname</label>
     <input type="text" [(ngModel)]="model.surname" id="surname" name="surname" #surnameField="formError">
   </div>
-
-  {{surnameField?.error?.type}}
 
   <div *ngIf="form.submitted && surnameField?.invalid">
     <ng-container *ngIf="surnameField.error.type === 'VALIDATE'">
