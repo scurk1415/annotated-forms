@@ -1,7 +1,4 @@
 import { Required } from '../../../annotated-validation/src/lib/validation/required-validator';
-import { Min } from '../../../annotated-validation/src/lib/validation/min-validator';
-import { Validate } from '../../../annotated-validation/src/lib/validation/validate';
-import { Max } from '../../../annotated-validation/src/lib/validation/max-validator';
 
 export class Item {
 

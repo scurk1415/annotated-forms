@@ -5,33 +5,27 @@ import { isValidationAndInvalid } from './validate';
 import { isMaxAndInvalid } from './max-validator';
 import { ValidationError } from './errors';
 
-export function isValid<T extends Record<string, any>>(obj: T, key: keyof T, control: AbstractControl): any {
-
+export function isValid<T extends Record<string, any>>(obj: T, key: keyof T, control: AbstractControl): ValidationError | null {
   const value = control.value;
 
-  if (isRequiredAndInvalid(value, obj, key, control)) {
-    return { type: 'REQUIRED' };
-  }
+  const error: ValidationError | null =
+    isRequiredAndInvalid(value, obj, key, control) ||
+    isMinAndInvalid(value, obj, key, control) ||
+    isMaxAndInvalid(value, obj, key, control) ||
+    isValidationAndInvalid(value, obj, key, control);
 
-  if (isMinAndInvalid(value, obj, key, control)) {
-    return false;
-  }
-
-  if (isMaxAndInvalid(value, obj, key, control)) {
-    return false;
-  }
-
-  if (isValidationAndInvalid(value, obj, key, control)) {
-    return false;
+  if (error) {
+    return error;
   }
 
   resetError(control);
-
   return null;
 }
 
-export function setError<K>(control: AbstractControl, error: ValidationError) {
+export function setError<T extends ValidationError>(control: AbstractControl, error: T): T {
   control?.setErrors(error);
+
+  return error;
 }
 
 function resetError(control: AbstractControl) {

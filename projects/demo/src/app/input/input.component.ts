@@ -2,6 +2,7 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ControlValueAccessor, NG_VALUE_ACCESSOR, AbstractControl, Validator, ValidationErrors, NG_VALIDATORS } from '@angular/forms';
 import { isValid } from '../../../../annotated-validation/src/lib/validation/validators';
+import { ValidationError } from '../../../../annotated-validation/src/lib/validation/errors';
 
 @Component({
   selector: 'app-input',
@@ -33,7 +34,7 @@ export class InputComponent<T extends object> implements ControlValueAccessor, V
   value: any = null;
 
   protected isTouched: boolean = false;
-  protected errors: any;
+  protected errors: ValidationError | null = null;
 
   validate(control: AbstractControl): ValidationErrors | null {
     const valid = isValid(this.model, this.name, control);
