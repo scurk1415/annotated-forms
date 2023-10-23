@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { NgForm } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 import { setError } from './validators';
 
 const maxKey = 'maxValidator';
@@ -25,7 +25,7 @@ function isMax<T extends object>(obj: T, property: Key<T>): MaxModel {
   return Reflect.getMetadata(maxKey, obj, property as string);
 }
 
-export function isMaxAndInvalid<T extends Record<string, any>>(value: number, obj: T, key: Key<T>, form: NgForm): boolean {
+export function isMaxAndInvalid<T extends Record<string, any>>(value: number, obj: T, key: Key<T>, control: AbstractControl): boolean {
   const maxValidation = isMax(obj, key);
 
   if (!maxValidation || !value) {
@@ -33,7 +33,7 @@ export function isMaxAndInvalid<T extends Record<string, any>>(value: number, ob
   }
 
   if (!maxValidation.skipNaN && isNaN(value)) {
-    setError(form, key, {type: 'NOT_A_NUMBER'});
+    setError(control, {type: 'NOT_A_NUMBER'});
     return true;
   }
 
@@ -41,7 +41,7 @@ export function isMaxAndInvalid<T extends Record<string, any>>(value: number, ob
   const condition = maxValidation.strictMaximum ? +value > maxValidation.max : +value >= maxValidation.max;
 
   if (condition) {
-    setError(form, key, {type: 'MAX_ERROR', maxValue: maxValidation.max});
+    setError(control, {type: 'MAX_ERROR', params: {maxValue: maxValidation.max}});
     return true;
   }
 

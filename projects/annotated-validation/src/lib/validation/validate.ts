@@ -1,5 +1,5 @@
-import "reflect-metadata";
-import { NgForm } from '@angular/forms';
+import 'reflect-metadata';
+import { AbstractControl } from '@angular/forms';
 import { setError } from './validators';
 
 const validateKey = 'customValidate';
@@ -21,7 +21,7 @@ function isValidate<T extends Record<string, any>>(obj: T, key: keyof T): Valida
   return Reflect.getMetadata(validateKey, obj, key as string);
 }
 
-export function isValidationAndInvalid<T extends Record<string, any>>(value: any, obj: T, key: keyof T, form: NgForm): boolean {
+export function isValidationAndInvalid<T extends Record<string, any>>(value: any, obj: T, key: keyof T, control: AbstractControl): boolean {
   const validate = isValidate(obj, key);
   if (!validate) {
     return false;
@@ -30,7 +30,7 @@ export function isValidationAndInvalid<T extends Record<string, any>>(value: any
   if (Array.isArray(validate)) {
     for (const validateElement of validate) {
       if (!validateElement.isValid(obj)) {
-        setError(form, key, { type: 'VALIDATE', ...validateElement.args });
+        setError(control, { type: 'VALIDATE', ...validateElement.args });
         return true;
       }
     }
@@ -38,7 +38,7 @@ export function isValidationAndInvalid<T extends Record<string, any>>(value: any
   }
 
   if (!validate.isValid(obj)) {
-    setError(form, key, { type: 'VALIDATE', ...validate.args });
+    setError(control, { type: 'VALIDATE', params: {...validate.args} });
     return true;
   }
 

@@ -1,0 +1,12 @@
+<label [for]="name" style="display: block">Name</label>
+
+<input type="text"
+       [value]="value"
+       [id]="name"
+       [name]="name"
+       (keyup)="onValueChange($event)"
+       (blur)="markAsTouched()">
+
+<div *ngIf="isTouched && errors">
+  {{errors | json}}
+</div>

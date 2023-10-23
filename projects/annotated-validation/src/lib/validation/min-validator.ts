@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { NgForm } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 import { setError } from './validators';
 
 const minKey = 'minValidator';
@@ -23,7 +23,7 @@ function isMin<T extends object>(obj: T, property: Key<T>): MinModel {
   return Reflect.getMetadata(minKey, obj, property as string);
 }
 
-export function isMinAndInvalid<T extends Record<string, any>>(value: number, obj: T, key: Key<T>, form: NgForm): boolean {
+export function isMinAndInvalid<T extends Record<string, any>>(value: number, obj: T, key: Key<T>, control: AbstractControl): boolean {
   const minValidation = isMin(obj, key);
 
   if (!minValidation || !value) {
@@ -31,7 +31,7 @@ export function isMinAndInvalid<T extends Record<string, any>>(value: number, ob
   }
 
   if (!minValidation.skipNaN && isNaN(value)) {
-    setError(form, key, {type: 'NOT_A_NUMBER'});
+    setError(control, {type: 'NOT_A_NUMBER'});
     return true;
   }
 
@@ -39,7 +39,7 @@ export function isMinAndInvalid<T extends Record<string, any>>(value: number, ob
   const condition = minValidation.strictMinimum ? +value < minValidation.min : +value <= minValidation.min;
 
   if (condition) {
-    setError(form, key, {type: 'MIN_ERROR', minValue: minValidation.min});
+    setError(control, {type: 'MIN_ERROR', params: {minValue: minValidation.min}});
     return true;
   }
 

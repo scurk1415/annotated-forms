@@ -8,7 +8,7 @@ export class Item {
   @Required()
   name: string = '';
 
-  @Required()
+/*  @Required()
   @Validate({
     isValid: (item: any) => {
       return item.name === item.surname;
@@ -22,6 +22,6 @@ export class Item {
   @Required()
   @Min(18)
   @Max(20)
-  age: number | null = null;
+  age: number | null = null;*/
 
 }

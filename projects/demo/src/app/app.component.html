@@ -1,48 +1,13 @@
 <form [ngFormOptions]="{updateOn: 'submit'}"
-      [item]="model"
-      (formSubmit)="check(form)"
       #form="ngForm">
-  <div>
-    <label for="name" style="display: block">Name</label>
-    <input type="text" [(ngModel)]="model.name" id="name" name="name" #nameField="formError">
-  </div>
 
-  <div *ngIf="form.submitted && nameField?.invalid">
-    <ng-container *ngIf="nameField.error.type === 'REQUIRED'">
-      Required
-    </ng-container>
-  </div>
-
-  <div>
-    <label for="surname" style="display: block">Surname</label>
-    <input type="text" [(ngModel)]="model.surname" id="surname" name="surname" #surnameField="formError">
-  </div>
-
-  <div *ngIf="form.submitted && surnameField?.invalid">
-    <ng-container *ngIf="surnameField.error.type === 'VALIDATE'">
-      Validate: {{surnameField.error['message']}}
-    </ng-container>
-    <ng-container *ngIf="surnameField.error.type === 'REQUIRED'">
-      Required
-    </ng-container>
-  </div>
-
-  <div>
-    <label for="age" style="display: block">Age</label>
-    <input type="text" [(ngModel)]="model.age" id="age" name="age" #ageField="formError">
-  </div>
-
-  <div *ngIf="form.submitted && ageField?.invalid">
-    <ng-container *ngIf="ageField.error.type === 'MIN_ERROR'">
-      Min Value {{ageField.error.minValue}}
-    </ng-container>
-    <ng-container *ngIf="ageField.error.type === 'MAX_ERROR'">
-      Max Value {{ageField.error.maxValue}}
-    </ng-container>
-  </div>
+  <app-input [(ngModel)]="model.name"
+             [model]="model"
+             [name]="'name'">
+  </app-input>
 
   <button>Submit</button>
 
-
-  {{model | json}}
+  {{model | json}} <br>
+  {{form.valid}}
 </form>

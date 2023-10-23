@@ -1,23 +1,17 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Item } from './Item';
-import { FormContainerDirective } from '../../../annotated-validation/src/lib/directives/form-container.directive';
-import { FormInputErrorDirective } from '../../../annotated-validation/src/lib/directives/form-input-error.directive';
+import { InputComponent } from './input/input.component';
+import { ValidateDirective } from '../../../annotated-validation/src/lib/directives/validate.directive';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, FormContainerDirective, FormInputErrorDirective]
+  imports: [CommonModule, FormsModule, InputComponent, ValidateDirective]
 })
 export class AppComponent {
-  title = 'template-forms';
-
   model: Item = new Item();
-
-  check(value: NgForm) {
-    console.log(value);
-  }
 }

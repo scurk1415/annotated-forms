@@ -1,47 +1,39 @@
 import { isRequiredAndInvalid } from './required-validator';
 import { isMinAndInvalid } from './min-validator';
-import { NgForm, ValidationErrors } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 import { isValidationAndInvalid } from './validate';
 import { isMaxAndInvalid } from './max-validator';
 import { ValidationError } from './errors';
 
-export function isValid<T extends Record<string, any>>(obj: T, form: NgForm): boolean {
+export function isValid<T extends Record<string, any>>(obj: T, key: keyof T, control: AbstractControl): any {
 
-  let isModelValid = true;
+  const value = control.value;
 
-  for (const key of Object.keys(obj)) {
-    const value = obj[key];
-
-    if (isRequiredAndInvalid(value, obj, key, form)) {
-      isModelValid = false;
-      continue;
-    }
-
-    if (isMinAndInvalid(value, obj, key, form)) {
-      isModelValid = false;
-      continue;
-    }
-
-    if (isMaxAndInvalid(value, obj, key, form)) {
-      isModelValid = false;
-      continue;
-    }
-
-    if (isValidationAndInvalid(value, obj, key, form)) {
-      isModelValid = false;
-      continue;
-    }
-
-    resetError(form, key);
+  if (isRequiredAndInvalid(value, obj, key, control)) {
+    return { type: 'REQUIRED' };
   }
 
-  return isModelValid;
+  if (isMinAndInvalid(value, obj, key, control)) {
+    return false;
+  }
+
+  if (isMaxAndInvalid(value, obj, key, control)) {
+    return false;
+  }
+
+  if (isValidationAndInvalid(value, obj, key, control)) {
+    return false;
+  }
+
+  resetError(control);
+
+  return null;
 }
 
-export function setError<K>(form: NgForm, key: K, error: ValidationError) {
-  form.control.get(key as string)?.setErrors(error);
+export function setError<K>(control: AbstractControl, error: ValidationError) {
+  control?.setErrors(error);
 }
 
-function resetError<K>(form: NgForm, key: K) {
-  form.control.get(key as string)?.setErrors(null);
+function resetError(control: AbstractControl) {
+  control.setErrors(null);
 }

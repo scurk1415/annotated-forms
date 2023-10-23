@@ -7,13 +7,19 @@ export type ValidationError =
   } |
   {
     type: 'MIN_ERROR',
-    minValue: number
+    params: {
+      minValue: number
+    }
   } |
   {
     type: 'MAX_ERROR',
-    maxValue: number
+    params: {
+      maxValue: number
+    }
   } |
   {
     type: 'VALIDATE',
-    [key: string]: string
+    params: {
+      [key: string]: string
+    }
   };
