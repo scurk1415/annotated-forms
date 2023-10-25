@@ -1,6 +1,4 @@
 import 'reflect-metadata';
-import { AbstractControl } from '@angular/forms';
-import { setError } from './validators';
 import { RequiredError } from './errors';
 
 const requiredKey = 'requiredValidator';
@@ -19,10 +17,10 @@ function isRequired<T extends Record<string, any>>(obj: T, property: keyof T): R
   return Reflect.getMetadata(requiredKey, obj, property as string);
 }
 
-export function checkRequired<T extends Record<string, any>>(value: any, obj: T, key: keyof T, control: AbstractControl): RequiredError | null {
+export function checkRequired<T extends Record<string, any>>(value: any, obj: T, key: keyof T): RequiredError | null {
   const required = isRequired(obj, key);
   if (required && isEmpty(value)) {
-    return setError(control, { type: 'REQUIRED' });
+    return { type: 'REQUIRED' };
   }
   return null;
 }

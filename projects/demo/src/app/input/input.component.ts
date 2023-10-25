@@ -39,10 +39,13 @@ export class InputComponent<T extends Record<string, any>> implements ControlVal
   constructor(protected form: NgForm) {}
 
   validate(control: AbstractControl): ValidationErrors | null {
-    const valid = validate(this.item, this.name, control);
-    this.errors = valid;
+    const errors = validate(this.item, this.name, control.value);
+    this.errors = errors;
+
+    control.setErrors(errors);
+
     console.log(this.errors);
-    return valid;
+    return errors;
   }
 
   registerOnChange(fn: (value: any) => {}) {

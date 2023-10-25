@@ -14,6 +14,6 @@ export class ValidateDirective<T extends Record<string, any>> implements Validat
   @Input({required: true}) name!: keyof T;
 
   validate(control: AbstractControl): ValidationErrors | null {
-    return validate(this.validateObject, this.name, control);
+    return validate(this.validateObject, this.name, control.value);
   }
 }
