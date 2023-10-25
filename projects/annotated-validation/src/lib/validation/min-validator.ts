@@ -24,7 +24,7 @@ function isMin<T extends object>(obj: T, property: Key<T>): MinModel {
   return Reflect.getMetadata(minKey, obj, property as string);
 }
 
-export function isMinAndInvalid<T extends Record<string, any>>(value: number, obj: T, key: Key<T>, control: AbstractControl): MinError | NumberError | null {
+export function checkMin<T extends Record<string, any>>(value: number, obj: T, key: Key<T>, control: AbstractControl): MinError | NumberError | null {
   const minValidation = isMin(obj, key);
 
   if (!minValidation || !value) {

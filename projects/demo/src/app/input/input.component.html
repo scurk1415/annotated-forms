@@ -7,6 +7,9 @@
        (keyup)="onValueChange($event)"
        (blur)="markAsTouched()">
 
-<div *ngIf="isTouched && errors">
+<div *ngIf="form?.touched && errors">
   {{errors | json}}
+</div>
+<div>
+  Model: {{item | json}}
 </div>

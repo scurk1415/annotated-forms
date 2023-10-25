@@ -1,7 +1,7 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ControlValueAccessor, NG_VALUE_ACCESSOR, AbstractControl, Validator, ValidationErrors, NG_VALIDATORS } from '@angular/forms';
-import { isValid } from '../../../../annotated-validation/src/lib/validation/validators';
+import { FormsModule, ControlValueAccessor, NG_VALUE_ACCESSOR, AbstractControl, Validator, ValidationErrors, NG_VALIDATORS, NgForm } from '@angular/forms';
+import { validate } from '../../../../annotated-validation/src/lib/validation/validators';
 import { ValidationError } from '../../../../annotated-validation/src/lib/validation/errors';
 
 @Component({
@@ -10,7 +10,7 @@ import { ValidationError } from '../../../../annotated-validation/src/lib/valida
   imports: [CommonModule, FormsModule],
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -20,42 +20,45 @@ import { ValidationError } from '../../../../annotated-validation/src/lib/valida
     { provide: NG_VALIDATORS, useExisting: InputComponent, multi: true }
   ]
 })
-export class InputComponent<T extends object> implements ControlValueAccessor, Validator {
+export class InputComponent<T extends Record<string, any>> implements ControlValueAccessor, Validator {
 
   @Input({ required: true })
-  model!: T;
+  item!: T;
 
   @Input({ required: true })
   name!: keyof T;
 
-  private onChange = (value: any) => {};
-  protected onTouched = () => {};
-
-  value: any = null;
+  protected value: any;
 
   protected isTouched: boolean = false;
   protected errors: ValidationError | null = null;
 
+  private onChange = (value: any): void => {};
+  protected onTouched = (): void => {};
+
+  constructor(protected form: NgForm) {}
+
   validate(control: AbstractControl): ValidationErrors | null {
-    const valid = isValid(this.model, this.name, control);
+    const valid = validate(this.item, this.name, control);
     this.errors = valid;
+    console.log(this.errors);
     return valid;
   }
 
-  registerOnChange(onChange: any) {
-    this.onChange = onChange;
+  registerOnChange(fn: (value: any) => {}) {
+    this.onChange = fn;
   }
 
-  registerOnTouched(onTouched: any) {
-    this.onTouched = onTouched;
+  registerOnTouched(fn: () => {}) {
+    this.onTouched = fn;
   }
 
-  writeValue(value: number) {
+  writeValue(value: any) {
     this.value = value;
   }
 
-  onValueChange(value: KeyboardEvent) {
-    this.onChange((value.target as HTMLInputElement).value);
+  onValueChange(event: KeyboardEvent) {
+    this.onChange((event.target as HTMLInputElement).value);
   }
 
   markAsTouched() {

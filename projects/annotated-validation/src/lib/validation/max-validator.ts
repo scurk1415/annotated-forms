@@ -26,7 +26,7 @@ function isMax<T extends object>(obj: T, property: Key<T>): MaxModel {
   return Reflect.getMetadata(maxKey, obj, property as string);
 }
 
-export function isMaxAndInvalid<T extends Record<string, any>>(value: number, obj: T, key: Key<T>, control: AbstractControl): MaxError | NumberError | null {
+export function checkMax<T extends Record<string, any>>(value: number, obj: T, key: Key<T>, control: AbstractControl): MaxError | NumberError | null {
   const maxValidation = isMax(obj, key);
 
   if (!maxValidation || !value) {

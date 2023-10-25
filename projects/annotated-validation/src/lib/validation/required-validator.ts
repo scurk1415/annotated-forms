@@ -19,7 +19,7 @@ function isRequired<T extends Record<string, any>>(obj: T, property: keyof T): R
   return Reflect.getMetadata(requiredKey, obj, property as string);
 }
 
-export function isRequiredAndInvalid<T extends Record<string, any>>(value: any, obj: T, key: keyof T, control: AbstractControl): RequiredError | null {
+export function checkRequired<T extends Record<string, any>>(value: any, obj: T, key: keyof T, control: AbstractControl): RequiredError | null {
   const required = isRequired(obj, key);
   if (required && isEmpty(value)) {
     return setError(control, { type: 'REQUIRED' });

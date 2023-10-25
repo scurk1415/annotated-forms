@@ -1,13 +1,15 @@
 import { Required } from '../../../annotated-validation/src/lib/validation/required-validator';
+import { Validate } from '../../../annotated-validation/src/lib/validation/validate';
 
 export class Item {
 
   @Required()
-  name: string = '';
+  name: string = 'test';
 
-/*  @Required()
+  @Required()
   @Validate({
-    isValid: (item: any) => {
+    isValid: (value: string, item: any) => {
+      console.log(item);
       return item.name === item.surname;
     },
     args: {
@@ -15,10 +17,5 @@ export class Item {
     }
   })
   surname: string = '';
-
-  @Required()
-  @Min(18)
-  @Max(20)
-  age: number | null = null;*/
 
 }

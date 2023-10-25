@@ -1,6 +1,6 @@
 import { Directive, Input } from '@angular/core';
 import { Validator, NG_VALIDATORS, AbstractControl, ValidationErrors } from '@angular/forms';
-import { isValid } from '../validation/validators';
+import { validate } from '../validation/validators';
 
 @Directive({
   selector: '[validate]',
@@ -14,6 +14,6 @@ export class ValidateDirective<T extends Record<string, any>> implements Validat
   @Input({required: true}) name!: keyof T;
 
   validate(control: AbstractControl): ValidationErrors | null {
-    return isValid(this.validateObject, this.name, control);
+    return validate(this.validateObject, this.name, control);
   }
 }

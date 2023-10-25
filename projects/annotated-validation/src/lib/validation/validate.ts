@@ -5,7 +5,7 @@ import { ValidateError } from './errors';
 
 const validateKey = 'customValidate';
 interface ValidateModel {
-  isValid: <T>(item: T) => boolean;
+  isValid: <T>(value: any, item: T) => boolean;
   args?: {
     [key: string]: any
   };
@@ -22,7 +22,7 @@ function isValidate<T extends Record<string, any>>(obj: T, key: keyof T): Valida
   return Reflect.getMetadata(validateKey, obj, key as string);
 }
 
-export function isValidationAndInvalid<T extends Record<string, any>>(value: any, obj: T, key: keyof T, control: AbstractControl): ValidateError | null {
+export function checkValidate<T extends Record<string, any>>(value: any, obj: T, key: keyof T, control: AbstractControl): ValidateError | null {
   const validate = isValidate(obj, key);
   if (!validate) {
     return null;
@@ -37,7 +37,7 @@ export function isValidationAndInvalid<T extends Record<string, any>>(value: any
     return null;
   }
 
-  if (!validate.isValid(obj)) {
+  if (!validate.isValid(value, obj)) {
     return setError(control, { type: 'VALIDATE', params: {...validate.args} });
   }
 

@@ -1,13 +1,30 @@
+<!--<app-form>
+  <app-input [(ngModel)]="model.name"
+             [item]="model"
+             [name]="'name'">
+  </app-input>
+
+  <app-input [(ngModel)]="model.surname"
+             [item]="model"
+             [name]="'surname'">
+  </app-input>
+</app-form>-->
+
 <form [ngFormOptions]="{updateOn: 'submit'}"
       #form="ngForm">
 
   <app-input [(ngModel)]="model.name"
-             [model]="model"
+             [item]="model"
              [name]="'name'">
+  </app-input>
+
+  <app-input [(ngModel)]="model.surname"
+             [item]="model"
+             [name]="'surname'">
   </app-input>
 
   <button>Submit</button>
 
   {{model | json}} <br>
-  {{form.valid}}
+  {{form.valid}}<br>
 </form>
